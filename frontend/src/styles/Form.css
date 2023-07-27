@@ -1,0 +1,92 @@
+.login-container {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #b1a7a7;
+    border-radius: 25px;
+    margin-top: 12.5%;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group-password {
+    position: relative;
+  }
+  
+  #password {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 5px;
+    outline: none;
+    border: none;
+    background: rgba(179, 177, 177, 0.371);
+    color: #111111;
+    border-radius: 15px;
+    margin: 5px;
+    font-weight: bold;
+    padding-right: 60px;
+  }
+  
+  .btn-eye-slash {
+    position: absolute;
+    right: 10px;
+    top: 65%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input[type='username'],
+  input[type='name'] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 5px;
+    outline: none;
+    border: none;
+    background: rgba(179, 177, 177, 0.371);
+    color: #111111;
+    border-radius: 15px;
+    margin: 5px;
+    font-weight: bold;
+  }
+  
+  button.btn-login {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+  
+  button.btn-login:hover {
+    background-color: #45a049;
+  }
+  
+  button.btn-signup {
+    margin: 10px;
+    padding: 10px 15px;
+    background-color: #111010;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  button.btn-signup:hover {
+    background-color: #303130;
+  }

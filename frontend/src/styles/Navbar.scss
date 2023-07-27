@@ -1,0 +1,41 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6e6e6e;
+  color: #fff;
+  padding: 10px;
+
+  .navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .navbar-search {
+    display: flex;
+    align-items: center;
+
+    input {
+      padding: 5px;
+      margin-right: 10px;
+    }
+
+    .btn-search {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  }
+
+  .navbar-actions {
+    .btn-logout {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  }
+}
