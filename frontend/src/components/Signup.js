@@ -26,19 +26,19 @@ const Signup = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
       const data = {
-        "name": name,
-        "username": username,
-        "password": password
+        "name": name.trim(),
+        "username": username.trim(),
+        "password": password.trim()
       };
       
       try {
         const response = await axios.post('http://localhost:8080/signup', data);
-          console.log(response.data);
-          if (response.data === true) {            
+          console.log(response.data.error);
+          if (response.data.pass === 'true') {            
             await swal("Signup successful!", "You will be redirected to Login", "success");   
             navigate('/');
           } else {
-            await swal("Signup unsuccessful!", "User already registered", "error");
+            await swal("Signup unsuccessful!", response.data.error, "warning");
           }
         }
         catch(error) {
@@ -55,6 +55,7 @@ const Signup = () => {
           <input
             type="name"
             id="name"
+            placeholder='Enter name..'
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -66,6 +67,7 @@ const Signup = () => {
           <input
             type="username"
             id="username"
+            placeholder='Enter username..'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -77,6 +79,7 @@ const Signup = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             id="password"
+            placeholder='Enter password..'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

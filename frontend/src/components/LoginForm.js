@@ -34,10 +34,11 @@ const LoginForm = () => {
       try {
         const response = await axios.post('http://localhost:8080/login', data);
           console.log(response.data);
-          if (response.data === true) {
+          if (response.data.pass === 'true') {
             await swal("Login successful!", "You will be redirected to dashboard!", "success");
-            localStorage.setItem('token', 'valid'); 
-            navigate('/dashboard');
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('name', response.data.name);
+            navigate('/dashboard')
           } else {
             await swal("Login unsuccessful!", "Invalid credentials!", "error");
           }
@@ -57,6 +58,7 @@ const LoginForm = () => {
             type="username"
             id="username"
             value={username}
+            placeholder='Enter username..'
             onChange={(e) => setUsername(e.target.value)}
             required
           />
@@ -67,6 +69,7 @@ const LoginForm = () => {
           <input
             type={showPassword ? 'text' : 'password'}
             id="password"
+            placeholder='Enter password..'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -76,8 +79,8 @@ const LoginForm = () => {
         </div>
         
         <button type="submit" className="btn-login">Login</button>
-        <button type="submit" className='btn-signup' onClick={navigateToSignup}>Don't have an account? Register</button>
       </form>     
+      <button type="submit" className='btn-signup' onClick={navigateToSignup}>Don't have an account? Register</button>
     </div>
   );
   }
