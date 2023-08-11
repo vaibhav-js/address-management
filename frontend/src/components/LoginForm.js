@@ -33,7 +33,6 @@ const LoginForm = () => {
       
       try {
         const response = await axios.post('http://localhost:8080/login', data);
-          console.log(response.data);
           if (response.data.pass === 'true') {
             await swal("Login successful!", "You will be redirected to dashboard!", "success");
             localStorage.setItem('token', response.data.token);

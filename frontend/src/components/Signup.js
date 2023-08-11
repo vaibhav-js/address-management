@@ -33,7 +33,6 @@ const Signup = () => {
       
       try {
         const response = await axios.post('http://localhost:8080/signup', data);
-          console.log(response.data.error);
           if (response.data.pass === 'true') {            
             await swal("Signup successful!", "You will be redirected to Login", "success");   
             navigate('/');

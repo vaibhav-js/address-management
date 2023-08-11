@@ -28,7 +28,6 @@ const Navbar = (props) => {
     }
 
     const addAccessible = async (e) => {
-      accessible.trim()
       try {
         const data = {
           "accessible": accessible.trim(), 
