@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import LoadingSpinner from "./LoadingSpinner";
+// import TableContent from "./TableContent";
 import axios from "axios";
 
 const Dashboard = () => {
@@ -38,8 +39,9 @@ const Dashboard = () => {
         <LoadingSpinner/>
         ) : <>
         <div>
-          <Navbar isOpen={sideBarOpen} updateAccessibles={updateAccessibles}/>
-          <Sidebar accessibles={accessibles} isOpen={sideBarOpen} toggleSidebar={handleSideBar}/>
+          <Navbar isOpen={sideBarOpen} updateAccessibles={updateAccessibles} />
+          <Sidebar accessibles={accessibles} isOpen={sideBarOpen} toggleSidebar={handleSideBar} />
+          {/* <TableContent /> */}
           </div>
           </>
       }

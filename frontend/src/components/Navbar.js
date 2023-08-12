@@ -35,13 +35,28 @@ const Navbar = (props) => {
           token: localStorage.getItem('token')
         }
       const response = await axios.post('http://localhost:8080/addaccessible', data);
-      if (response.data.newAccessible) {
+      if (response.data.newAccessible && response.data.icon === "success") {
         props.updateAccessibles(response.data.newAccessible);
       } else {
-        await swal("Oops :(", response.data.error, "error");
+        await swal("Oops :(", response.data.error, response.data.icon);
       }
       } catch (error) {
         console.error('Error adding accessible', error);
+      }
+    }
+
+    const removeAllAccessibles = async () => {
+      try {
+        const data = {token: localStorage.getItem('token')}
+        const response = await axios.delete('http://localhost:8080/removeAllAccessible', {data});
+              if(response.data.error === undefined && response.data.icon === "success") {
+                props.updateAccessibles([])
+                await swal("Successfully deleted", "All accessibles", response.data.icon);
+              } else {
+                await swal("Oops :(", response.data.error, response.data.icon);
+              }
+      } catch (error) {
+        console.error(error)
       }
     }
 
@@ -63,6 +78,7 @@ const Navbar = (props) => {
         />
         <button className="btn-search" onClick={addAccessible}>Submit</button>
       </div>
+      <button className="btn-delete" onClick={removeAllAccessibles}>Delete All Accessibles</button>
       <div className="navbar-actions">
       <button type="submit" className="btn-logout" onClick={logout}>Logout</button>
       </div>

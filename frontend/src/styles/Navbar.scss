@@ -29,10 +29,17 @@
       cursor: pointer;
     }
   }
+  .btn-delete {
+    background-color: #ff011a;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
 
   .navbar-actions {
     .btn-logout {
-      background-color: #dc3545;
+      background-color: #e417ff;
       color: #fff;
       border: none;
       padding: 5px 10px;

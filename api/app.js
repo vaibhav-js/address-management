@@ -97,40 +97,46 @@ app.post('/addaccessible', (req, res) => {
 
   const {accessible, accessibleValue, token } = req.body;
   if (!accessible.trim() && !accessibleValue.trim()) {
-    return res.send({newAccessible: undefined, error: "Provide your accessible"});
+    return res.send({newAccessible: undefined, error: "Provide your accessible", icon: "error"});
   } else if (!accessible.trim()) {
-    return res.send({newAccessible: undefined, error: "Accessible cannot be empty!"});
+    return res.send({newAccessible: undefined, error: "Accessible cannot be empty!", icon: "warning"});
   } else if (!accessibleValue.trim()) {
-    return res.send({newAccessible: undefined, error: "Accessible value cannot be empty!"});
+    return res.send({newAccessible: undefined, error: "Accessible value cannot be empty!", icon: "warning"});
   }
  
   pool.query('select id from users where token = $1',[token], (err, result) => {
     if (err) {
-      res.send({newAccessible: undefined, error: 'Something went wrong!'});
+      res.send({newAccessible: undefined, error: 'Something went wrong!', icon: "error"});
     } else if(result.rowCount) {
       pool.query('select id from accessibles where name = $1', [accessible], (err2, result2) => {
         if (err2) {
-          res.send({newAccessible: undefined, error: 'Cannot retrieve accessible'});
+          res.send({newAccessible: undefined, error: 'Cannot retrieve accessible', icon: "error"});
         } else if (result2.rowCount) {
-          pool.query('insert into userAccessiblesMapping (userid, aid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err3, result3) => {
+          pool.query('select * from userAccessiblesMapping where userid = $1 and aid = $2', [result.rows[0].id, result2.rows[0].id], (err3, result3) => {
             if (err3) {
-              res.send({newAccessible: undefined, error: 'Something went wrong!'});
+              res.send({newAccessible: undefined, error: 'Something went wrong!', icon: "error"});
             } else if (result3.rowCount) {
-              res.send({newAccessible: undefined, error: 'Alreay added'});
+              res.send({newAccessible: undefined, error: 'Alreay added', icon: "info"});
             } else {
-              res.send({newAccessible: accessible, error: undefined});
+              pool.query('insert into userAccessiblesMapping (userid, aid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err4, result4) => {
+                if (err4) {
+                  res.send({newAccessible: undefined, error: 'Something went wrong!', icon: "error"});
+                } else {
+                  res.send({newAccessible: accessible, error: undefined, icon: "success"});
+                }
+              })
             }
           })
         } else {
-          pool.query('insert into accessibles (name, value) values ($1, $2) returning id', [accessible, accessibleValue], (err4, result4) => {
-            if (err4) {
-              res.send({newAccessible: undefined, error: 'Cannot add accessible'});
+          pool.query('insert into accessibles (name, value) values ($1, $2) returning id', [accessible, accessibleValue], (err5, result5) => {
+            if (err5) {
+              res.send({newAccessible: undefined, error: 'Cannot add accessible', icon: "error"});
             } else {
-              pool.query('insert into userAccessiblesMapping (userid, aid) values ($1, $2)', [result.rows[0].id, result4.rows[0].id], (err5, result5) => {
-                if (err5) {
-                  res.send({newAccessible: undefined, error: 'Cannot map accessible'});
+              pool.query('insert into userAccessiblesMapping (userid, aid) values ($1, $2)', [result.rows[0].id, result5.rows[0].id], (err6, result6) => {
+                if (err6) {
+                  res.send({newAccessible: undefined, error: 'Cannot map accessible', icon: "error"});
                 } else {
-                  res.send({newAccessible: accessible, error: undefined});
+                  res.send({newAccessible: accessible, error: undefined, icon: "success"});
                 }
               })
             }
@@ -139,7 +145,26 @@ app.post('/addaccessible', (req, res) => {
       });
     }
     else {
-      res.send({newAccessible: undefined, error: 'cannot find user'});
+      res.send({newAccessible: undefined, error: 'cannot find user', icon: "error"});
+    }
+  })
+})
+
+app.delete('/removeAllAccessible', (req, res) => {
+  const token = req.body.token;
+  pool.query('select id from users where token = $1', [token], (err, result) => {
+    if (err) {
+      res.send({error: "cannot find user", icon: "error"});
+    } else {
+      pool.query('delete from useraccessiblesmapping where userid = $1', [result.rows[0].id], (err2, result2) => {
+        if (err2) {
+          res.send({error: "error in removing all accessibles", icon: "error"});
+        } else if (result2.rowCount){
+          res.send({error: undefined, icon: "success"});
+        } else {
+          res.send({error: "Nothing to delete", icon: "warning"});
+        }
+      });
     }
   })
 })
