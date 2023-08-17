@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import LoadingSpinner from "./LoadingSpinner";
-// import TableContent from "./TableContent";
+import TableContent from "./TableContent";
 import axios from "axios";
 
 const Dashboard = () => {
@@ -22,7 +22,8 @@ const Dashboard = () => {
 
     const updateAccessibles = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/getaccessible', {params: {token: localStorage.getItem('token')}});
+        const response = await axios.get('http://localhost:8080/getaccessible', 
+        {params: {token: localStorage.getItem('token')}});
         setAccessibles(response.data)
       } catch (error) {
         console.error('Error while getting accessible', error);
@@ -41,7 +42,7 @@ const Dashboard = () => {
         <div>
           <Navbar isOpen={sideBarOpen} updateAccessibles={updateAccessibles} />
           <Sidebar accessibles={accessibles} isOpen={sideBarOpen} toggleSidebar={handleSideBar} />
-          {/* <TableContent /> */}
+          <TableContent />
           </div>
           </>
       }

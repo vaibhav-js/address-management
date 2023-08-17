@@ -20,21 +20,16 @@
       padding: 5px;
       margin-right: 10px;
     }
-
-    .btn-search {
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
   }
   .btn-delete {
-    background-color: #ff011a;
+    background-color: #ff0019;
     color: #fff;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
+  }
+  .btn-delete:hover {
+    background-color: #c50014;
   }
 
   .navbar-actions {
@@ -45,5 +40,23 @@
       padding: 5px 10px;
       cursor: pointer;
     }
+    .btn-logout:hover {
+      background-color: #df00fdb0;
+    }
+  }
+}
+.btn-search {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+
+  &:hover:not([disabled]) {
+    background-color: #007bffac;
+  }
+  &:disabled {
+    background-color: #2d2e30;
+    cursor: not-allowed;
   }
 }

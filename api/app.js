@@ -35,12 +35,12 @@ app.post('/signup', (req, res) => {
   const {name, username, password} = req.body;
 
   if (!name || !username || !password) {
-    return res.send({error: 'Could not read empty', pass: 'false'})
+    return res.send({error: "Could not read empty", pass: "false"})
   }
 
   pool.query('select * from users where username = $1',[username], (err, result) => {
     if (err) {
-      res.send({error:err, pass: 'false'});
+      res.send({error:"Cannot find user", pass: 'false'});
     } else if(result.rowCount){
       res.send({error:'User exists', pass: 'false'});
     } else {
@@ -108,7 +108,7 @@ app.post('/addaccessible', (req, res) => {
     if (err) {
       res.send({newAccessible: undefined, error: 'Something went wrong!', icon: "error"});
     } else if(result.rowCount) {
-      pool.query('select id from accessibles where name = $1', [accessible], (err2, result2) => {
+      pool.query('select id from accessibles where name = $1 and value = $2', [accessible, accessibleValue], (err2, result2) => {
         if (err2) {
           res.send({newAccessible: undefined, error: 'Cannot retrieve accessible', icon: "error"});
         } else if (result2.rowCount) {
@@ -188,6 +188,77 @@ app.get('/getaccessible', (req, res) => {
     }
   });
 })
+
+
+
+app.post('/addlocation', (req, res) => {
+
+  const {formData, token} = req.body
+  const {address, city, state, country, postal } = formData;
+
+  pool.query('select id from users where token = $1', [token], (err, result) => {
+    if (err) {
+      res.send({icon: "error"}).status(400);
+    } else if(result.rowCount) {
+      pool.query("insert into locations (address, city, state, country, postal) values ($1, $2, $3, $4, $5) returning id", 
+      [address, city, state, country, postal], 
+      (err2, result2) => {
+        if (err2) {
+          res.send({icon: "error"}).status(400);
+        } else {
+          pool.query('insert into userlocationmap (userid, locationid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err3, result3) => {
+            if (err3) {
+              res.send({icon: "error"}).status(400);
+            } else {
+              res.send({icon: "success"}).status(200);
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
+app.get('/getlocations', (req, res) => {
+  const token = req.query.token
+  pool.query('select locationid from userlocationmap where userid = (select id from users where token = $1)', [token], (err, result) => {
+    if (err) {
+      console.error(err)
+      res.send(err)
+    } else {
+      const allLocationIds = result.rows.map(row => row.locationid);
+      const locationListIds = allLocationIds.join(',');
+      const query = `select * from locations where id IN (${locationListIds})`
+      pool.query(query, (err2, result2)=> {
+        if (err2) {
+          res.send(err2)
+        } else {
+          res.send(result2.rows);
+        }
+      })
+    }
+  })
+})
+
+app.delete('/removealllocations', (req, res) => {
+  const token = req.body.token
+  pool.query('select id from users where token = $1', [token], (err, result) => {
+    if (err) {
+      res.send({error: "cannot find user", icon: "error"});
+    } else {
+      pool.query('delete from userlocationmap where userid = $1', [result.rows[0].id], (err2, result2) => {
+        if (err2) {
+          res.send({error: "error in removing all locations", icon: "error"});
+        } else if (result2.rowCount){
+          res.send({error: undefined, icon: "success"});
+        } else {
+          res.send({error: "Nothing to delete", icon: "warning"});
+        }
+      });
+    }
+  })
+})
+
 
 app.listen(8080, () => {
     console.log("Running on server 8080..");

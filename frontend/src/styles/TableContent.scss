@@ -1,0 +1,25 @@
+.right-align {
+  text-align: right;
+}
+
+.add-button {
+  background-color: rgb(78, 255, 237) !important;
+  color: black !important;
+  border: none !important;
+}
+
+.add-button:hover {
+    background-color: rgb(0, 149, 132) !important;
+    color: white !important;
+}
+
+.delete-button {
+    background-color: #ff0019 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.delete-button:hover {
+    background-color: #c50014 !important;
+    color: white !important
+}

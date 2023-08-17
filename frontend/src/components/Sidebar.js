@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Sidebar.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-const converter = require('number-to-words')
+import { Accordion } from 'react-bootstrap';
 
 
 const Sidebar = (props) => {
@@ -10,23 +10,19 @@ const Sidebar = (props) => {
 
   return (
     <div className={sidebarClass}>  
-       
-      <div className="accordion" id="accordionExample">
-        {Array.isArray(props.accessibles) && props.accessibles.length > 0 ? (props.accessibles.map(accessible => (
-          <div className="accordion-item" key={accessible.id}>
-            <h2 className="accordion-header" id={`heading${converter.toWords(accessible.id)}`}>
-            <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${converter.toWords(accessible.id)}`} aria-expanded="true" aria-controls={`collapse${converter.toWords(accessible.id)}`}>
-              {accessible.name}
-            </button>
-            </h2>
-            <div id={`collapse${converter.toWords(accessible.id)}`} className="accordion-collapse collapse show" aria-labelledby={`heading${converter.toWords(accessible.id)}`} data-bs-parent="#accordionExample">
-              <div className="accordion-body"><strong>{accessible.value}</strong>
-              </div>
-            </div>
-          </div>
-        ))) : <p>No accessibles</p>}
-        </div>
       <button onClick={props.toggleSidebar} className='sidebar-toggle'><FontAwesomeIcon icon={faBars} /></button>
+      <Accordion>
+        {Array.isArray(props.accessibles) && props.accessibles.length > 0 ? (props.accessibles.map(accessible => (
+                  
+                  <Accordion.Item key= {accessible.id} eventKey={accessible.id.toString()}>
+                  <Accordion.Header>{accessible.name}</Accordion.Header>
+                  <Accordion.Body>{accessible.value}</Accordion.Body>
+                  </Accordion.Item>
+        
+        ))) : <h5>No accessibles to show.</h5>}
+
+      </Accordion>
+
     </div>
   );
 };

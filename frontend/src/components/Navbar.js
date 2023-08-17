@@ -8,6 +8,7 @@ const Navbar = (props) => {
 
     const [accessible, setAccessible] = useState('');
     const [accessibleValue, setAccessibleValue] = useState('');
+    const [disableSubmit, setSubmitDisable] = useState(false);
     const navigate = useNavigate();
 
     if (props.isOpen) {
@@ -29,6 +30,7 @@ const Navbar = (props) => {
 
     const addAccessible = async (e) => {
       try {
+        setSubmitDisable(true);
         const data = {
           "accessible": accessible.trim(), 
           "accessibleValue": accessibleValue.trim(), 
@@ -43,6 +45,7 @@ const Navbar = (props) => {
       } catch (error) {
         console.error('Error adding accessible', error);
       }
+      setSubmitDisable(false)
     }
 
     const removeAllAccessibles = async () => {
@@ -76,7 +79,14 @@ const Navbar = (props) => {
         placeholder="Enter Value" 
         onChange={(e) => setAccessibleValue(e.target.value)}
         />
-        <button className="btn-search" onClick={addAccessible}>Submit</button>
+       <button
+        className="btn-search"
+        onClick={addAccessible}
+        disabled={disableSubmit}
+        >
+        Submit
+       </button>
+
       </div>
       <button className="btn-delete" onClick={removeAllAccessibles}>Delete All Accessibles</button>
       <div className="navbar-actions">
