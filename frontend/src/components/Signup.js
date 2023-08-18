@@ -12,6 +12,7 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [disableSignupButton, setDisableSignupButton] = useState(false)
     const navigate = useNavigate();
 
     const togglePasswordVisibility = (e) => {
@@ -23,8 +24,9 @@ const Signup = () => {
         navigate('/');
     }
 
-    const handleLogin = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
+        setDisableSignupButton(true);
       const data = {
         "name": name.trim(),
         "username": username.trim(),
@@ -43,12 +45,13 @@ const Signup = () => {
         catch(error) {
           console.error(error);
         };
+        setDisableSignupButton(false);
     };
 
   return (
     <div className="login-container">
       <h2>Register</h2>
-      <form className="login-form" onSubmit={handleLogin}>
+      <form className="login-form" onSubmit={handleSignup}>
       <div className="form-group">
           <label htmlFor="name">Name:</label>
           <input
@@ -83,11 +86,23 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        <button className='btn-eye-slash' onClick={togglePasswordVisibility}>{showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</button>
+        <button
+        className='btn-eye-slash'
+        onClick={togglePasswordVisibility}>
+          {
+          showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />
+          }
+        </button>
 
         </div>
 
-        <button type="submit" className="btn-login">Register</button>
+        <button
+        type="submit"
+        className="btn-login-signup-form"
+        disabled={disableSignupButton}
+        >
+          Register
+        </button>
       </form>
       <button type="submit" className='btn-signup' onClick={navigateToLogin}>Already have an account? Login</button>
     </div>

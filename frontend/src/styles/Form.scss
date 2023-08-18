@@ -61,7 +61,7 @@
       font-weight: bold;
     }
 
-    button.btn-login {
+    button.btn-login-signup-form {
       margin-top: 5px;
       padding: 10px 15px;
       background-color: #4CAF50;
@@ -72,6 +72,11 @@
 
       &:hover {
         background-color: #45a049;
+      }
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        opacity: 0.6;
       }
     }
   }

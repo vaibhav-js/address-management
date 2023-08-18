@@ -12,6 +12,7 @@ const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [disableLoginButton, setDisableLoginButton] = useState(false);
     const navigate = useNavigate();
 
 
@@ -26,6 +27,7 @@ const LoginForm = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setDisableLoginButton(true);
       const data = {
         "username": username,
         "password": password
@@ -45,6 +47,7 @@ const LoginForm = () => {
         catch(error) {
           console.error(error);
         };
+        setDisableLoginButton(false);
     };
 
   return (
@@ -77,7 +80,13 @@ const LoginForm = () => {
           <button className='btn-eye-slash' onClick={togglePasswordVisibility}>{showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}</button>
         </div>
         
-        <button type="submit" className="btn-login">Login</button>
+        <button
+        type="submit"
+        className="btn-login-signup-form"
+        disabled={disableLoginButton}
+        >
+          Login
+        </button>
       </form>     
       <button type="submit" className='btn-signup' onClick={navigateToSignup}>Don't have an account? Register</button>
     </div>
