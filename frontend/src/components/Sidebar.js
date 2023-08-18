@@ -1,8 +1,7 @@
 import React from 'react';
 import '../styles/Sidebar.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { Accordion } from 'react-bootstrap';
+import { faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 
 const Sidebar = (props) => {
@@ -10,19 +9,22 @@ const Sidebar = (props) => {
 
   return (
     <div className={sidebarClass}>  
-      <button onClick={props.toggleSidebar} className='sidebar-toggle'><FontAwesomeIcon icon={faBars} /></button>
-      <Accordion>
-        {Array.isArray(props.accessibles) && props.accessibles.length > 0 ? (props.accessibles.map(accessible => (
-                  
-                  <Accordion.Item key= {accessible.id} eventKey={accessible.id.toString()}>
-                  <Accordion.Header>{accessible.name}</Accordion.Header>
-                  <Accordion.Body>{accessible.value}</Accordion.Body>
-                  </Accordion.Item>
-        
-        ))) : <h5>No accessibles to show.</h5>}
-
-      </Accordion>
-
+      <button onClick={props.toggleSidebar} className='sidebar-toggle'>
+        {
+          props.isOpen ? <FontAwesomeIcon icon={faArrowLeft} size='lg' beatFade /> : <FontAwesomeIcon icon={faArrowRight} size='lg' beatFade />
+        }
+      </button>
+      <ul className="sidebar-menu">
+        <li>
+          <a href="/dashboard">Dashboard</a>
+        </li>
+        <li>
+          <a href="/">Profile</a>
+        </li>
+        <li>
+          <a href="/contact">Settings</a>
+        </li>
+      </ul>
     </div>
   );
 };
