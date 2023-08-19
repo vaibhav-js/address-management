@@ -19,10 +19,10 @@ const Sidebar = (props) => {
           <a href="/dashboard">Dashboard</a>
         </li>
         <li>
-          <a href="/">Profile</a>
+          <a href="/profile">Profile</a>
         </li>
         <li>
-          <a href="/contact">Settings</a>
+          <a href="/settings">Settings</a>
         </li>
       </ul>
     </div>
