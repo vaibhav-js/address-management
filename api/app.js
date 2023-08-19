@@ -189,8 +189,6 @@ app.get('/getaccessible', (req, res) => {
   });
 })
 
-
-
 app.post('/addlocation', (req, res) => {
 
   const {formData, token} = req.body
@@ -198,23 +196,46 @@ app.post('/addlocation', (req, res) => {
 
   pool.query('select id from users where token = $1', [token], (err, result) => {
     if (err) {
-      res.send({icon: "error"}).status(400);
+      res.send({icon: "error", message: "Something wrong happened"}).status(400);
     } else if(result.rowCount) {
-      pool.query("insert into locations (address, city, state, country, postal) values ($1, $2, $3, $4, $5) returning id", 
-      [address, city, state, country, postal], 
-      (err2, result2) => {
+      const query = 'select id from locations where address = $1 and city = $2 and state = $3 and country = $4 and postal = $5';
+      pool.query(query, [address, city, state, country, postal], (err2, result2) => {
         if (err2) {
-          res.send({icon: "error"}).status(400);
-        } else {
-          pool.query('insert into userlocationmap (userid, locationid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err3, result3) => {
+          res.send({icon: "error", message: "Error finding location"}).status(400);
+        } else if (result2.rowCount) {
+          pool.query('select * from userlocationmap where userid = $1 and locationid = $2', [result.rows[0].id,result2.rows[0].id, ], (err3, result3) => {
             if (err3) {
-              res.send({icon: "error"}).status(400);
+              res.send({icon: "error", message: "Error finding user location"}).status(400);
+            } else if (result3.rowCount) {
+              res.send({icon: "warning", message: "Already added"}).status(200);
             } else {
-              res.send({icon: "success"}).status(200);
+              pool.query('insert into userlocationmap (userid, locationid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err4, result4) => {
+                if (err4) {
+                  res.send({icon: "error", message: "Could not add location"}).status(400);
+                } else {
+                  res.send({icon: "success", message: "Successfully added location"}).status(200);
+                }
+              })
+            }
+          })
+        } else {
+          pool.query("insert into locations (address, city, state, country, postal) values ($1, $2, $3, $4, $5) returning id", 
+          [address, city, state, country, postal], 
+          (err2, result2) => {
+            if (err2) {
+              res.send({icon: "error", message: "Could not add location"}).status(400);
+            } else {
+              pool.query('insert into userlocationmap (userid, locationid) values ($1, $2)', [result.rows[0].id, result2.rows[0].id], (err3, result3) => {
+                if (err3) {
+                  res.send({icon: "error", message: "Could not map location"}).status(400);
+                } else {
+                  res.send({icon: "success", message: "Succesfully added location"}).status(200);
+                }
+              })
             }
           })
         }
-      })
+      }) 
     }
   })
 })
