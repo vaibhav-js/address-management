@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
-import FormModal from './FormModal'
+import FormModal from './TableFormModal'
 import axios from "axios";
 import '../styles/TableContent.scss'
 import swal from "sweetalert";
