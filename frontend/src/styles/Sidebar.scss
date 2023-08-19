@@ -1,7 +1,7 @@
 .sidebar {
   position: absolute;
   left: -15vw;
-  height: 91vh;
+  height: 91.6vh;
   width: 15vw;
   transition: left 1.0s ease-in-out;
   background-color: rgb(147, 147, 147);
@@ -16,7 +16,7 @@
   cursor: pointer;
 }
 .sidebar.open {
-  height: 91vh;
+  height: 91.6vh;
   background-color: rgb(147, 147, 147);
   left: 0;
 }
