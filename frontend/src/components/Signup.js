@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
 import '../styles/Form.scss'
+import GoogleLoginButton from './GoogleLoginButton';
 
 const Signup = () => {
 
@@ -105,6 +106,8 @@ const Signup = () => {
         </button>
       </form>
       <button type="submit" className='btn-signup' onClick={navigateToLogin}>Already have an account? Login</button>
+      <center>OR</center>
+      <GoogleLoginButton />
     </div>
   );
   }

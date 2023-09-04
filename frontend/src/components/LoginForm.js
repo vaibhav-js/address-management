@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
+import GoogleLoginButton from './GoogleLoginButton';
 import '../styles/Form.scss'
 
 
@@ -89,6 +90,9 @@ const LoginForm = () => {
         </button>
       </form>     
       <button type="submit" className='btn-signup' onClick={navigateToSignup}>Don't have an account? Register</button>
+      <center>OR</center>
+      <br />
+      <GoogleLoginButton />
     </div>
   );
   }
