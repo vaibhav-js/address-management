@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const {pool} = require('./dbConfig');
+const {OAuth2Client} = require('google-auth-library')
 
 const app = express();
 
@@ -53,6 +54,24 @@ app.post('/signup', (req, res) => {
       });
     }
   });
+})
+
+app.post('/googlelogin', async (req, res) => {
+  const {token, client_id} = req.body;
+  const client = new OAuth2Client();
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: client_id
+    })
+    const payload = ticket.getPayload();
+    const name = payload['given_name'];
+    const userId = payload['sub'];
+    const emailVerified = payload['email_verified'];
+    res.send({name, username: userId, emailVerified, error: undefined});
+  } catch (error) {
+    res.send({name : undefined, username: undefined, emailVerified: false, error: error});
+  }
 })
 
 app.post('/login', (req, res) => {
