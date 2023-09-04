@@ -26,9 +26,50 @@ const LoginForm = () => {
         navigate('/signup')
     }
 
+    const handleGoogleLoginSuccess = async (googleResponse) => {
+      try {
+        const data = {
+          token: googleResponse.credential,
+          client_id: googleResponse.client_id
+        }
+        const axiosResponse = await axios.post('http://localhost:8080/googlelogin', data);
+        if(axiosResponse.data.emailVerified === true) {
+          const userData = {
+            "username": axiosResponse.data.username,
+            "password": axiosResponse.data.username
+          };
+          
+          try {
+            const loginResponse = await axios.post('http://localhost:8080/login', userData);
+              if (loginResponse.data.pass === 'true') {
+                await swal("Login successful!", "You will be redirected to dashboard!", "success");
+                localStorage.setItem('token', loginResponse.data.token);
+                localStorage.setItem('name', loginResponse.data.name);
+                navigate('/dashboard')
+              } else {
+                await swal("Login unsuccessful!", "Invalid credentials!", "error");
+              }
+            }
+            catch(error) {
+              console.error(error);
+            };
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const handleGoogleLoginError = (googleResponse) => {
+      swal("Somethin went wrong!", "Try again after some time", "error");
+      console.error(googleResponse);
+    }
+
     const handleLogin = async (e) => {
+      if (e) {
         e.preventDefault();
-        setDisableLoginButton(true);
+      }
+
+      setDisableLoginButton(true);
       const data = {
         "username": username,
         "password": password
@@ -92,7 +133,7 @@ const LoginForm = () => {
       <button type="submit" className='btn-signup' onClick={navigateToSignup}>Don't have an account? Register</button>
       <center>OR</center>
       <br />
-      <GoogleLoginButton />
+      <GoogleLoginButton onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError}/>
     </div>
   );
   }

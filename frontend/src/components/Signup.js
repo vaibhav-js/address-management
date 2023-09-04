@@ -13,7 +13,7 @@ const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [disableSignupButton, setDisableSignupButton] = useState(false)
+    const [disableSignupButton, setDisableSignupButton] = useState(false);
     const navigate = useNavigate();
 
     const togglePasswordVisibility = (e) => {
@@ -25,8 +25,47 @@ const Signup = () => {
         navigate('/');
     }
 
+    const handleGoogleSignupSuccess = async (googleResponse) => {
+      try {
+        const data = {
+          token: googleResponse.credential,
+          client_id: googleResponse.client_id
+        }
+        const axiosResponse = await axios.post('http://localhost:8080/googlelogin', data);
+        if(axiosResponse.data.emailVerified === true) {
+          const userData = {
+            "name": axiosResponse.data.name,
+            "username": axiosResponse.data.username,
+            "password": axiosResponse.data.username
+          };
+          
+          try {
+            const loginResponse = await axios.post('http://localhost:8080/signup', userData);
+              if (loginResponse.data.pass === 'true') {            
+                await swal("Signup successful!", "You will be redirected to Login", "success");   
+                navigate('/');
+              } else {
+                await swal("Signup unsuccessful!", loginResponse.data.error, "warning");
+              }
+            }
+            catch(error) {
+              console.error(error);
+            };
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const handleGoogleSignupError = (googleResponse) => {
+      swal("Somethin went wrong!", "Try again after some time", "error");
+      console.error(googleResponse);
+    }
+
     const handleSignup = async (e) => {
+      if (e) {
         e.preventDefault();
+      }
         setDisableSignupButton(true);
       const data = {
         "name": name.trim(),
@@ -107,7 +146,7 @@ const Signup = () => {
       </form>
       <button type="submit" className='btn-signup' onClick={navigateToLogin}>Already have an account? Login</button>
       <center>OR</center>
-      <GoogleLoginButton />
+      <GoogleLoginButton onSuccess={handleGoogleSignupSuccess} onError={handleGoogleSignupError}/>
     </div>
   );
   }
