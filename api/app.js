@@ -203,6 +203,28 @@ app.delete('/removealllocations', (req, res) => {
   })
 })
 
+app.put('/updatepassword', (req, res) => {
+  const {token, oldPassword, newPassword} = req.body;
+  pool.query('select * from users where token = $1', [token], (err1, res1) => {
+    if (err1) {
+      console.error(err1)
+      res.send({success: false, message: "Cannot find user"});
+    } else if (res1.rowCount) {
+      if (res1.rows[0].password !== oldPassword) {
+        res.send({success: false, message: "Old password wrong"})
+      } else {
+        pool.query('update users set password = $1', [newPassword], (err2, res2) => {
+          if (err2) {
+            console.error(err2);
+            res.send({success: false, message: "Cannot update password"})
+          } else {
+            res.send({success: true, message: "Password updated"});
+          }
+        })
+      }
+    }
+  })
+})
 
 app.listen(8080, () => {
     console.log("Running on server 8080..");
